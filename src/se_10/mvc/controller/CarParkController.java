@@ -12,5 +12,5 @@ public class CarParkController {
 	private VisitorView visitorView = new VisitorView();
 	private CarPark park = new CarPark();
 	
-	// Controls the views and the model and the flow
+	// Controls the views and the model (and the flow?)
 }
