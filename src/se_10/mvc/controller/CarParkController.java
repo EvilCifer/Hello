@@ -27,13 +27,14 @@ public class CarParkController implements ActionListener{
 	private JFrame frame;
 	private JButton enter, leave;
 	private JPanel buttonPanel, dayPanel, weekPanel, controlPanel;
+	private static double sum = 0;
 	
 	// Controls the views and the model (and the flow?)
 	
 	// Controller should save the visitors, in a  list or array.
 	
 	public CarParkController() {
-		
+		park.setPricePerHour(2.00);
 	}
 	
 	// Singleton Pattern because we want only one Instance of the CarPark per CarPark
@@ -67,6 +68,8 @@ public class CarParkController implements ActionListener{
 		frame.setVisible(true);
 	}
 
+	
+	// Use Timer to prevent double click on enter???
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource() == enter) {
@@ -75,7 +78,7 @@ public class CarParkController implements ActionListener{
 				if(isFull()) break;
 				if(!parkingSpotOccupied(i)) {
 					park.setParkingInParkingSpot(i, new Cars());
-					dayView.addData(new Object[] {park.getParkingSpot(i).getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm")), "", ""});
+					dayView.addData(new Object[] {park.getParkingSpot(i).getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), "", ""});
 					break;
 				}
 				i = (int) (Math.random() * park.size());
@@ -89,15 +92,21 @@ public class CarParkController implements ActionListener{
 					Cars car = park.getParkingSpot(i);
 					car.setActualTime(LocalDateTime.now());
 					car.setActualPrice(park.getPricePerHour());
-					dayView.refresh(car.getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm")), car.getActualTime().format(DateTimeFormatter.ofPattern("HH:mm")), car.getActualPrice());
-//					Object[] o = new Object[] {car.getActualTime().format(DateTimeFormatter.ofPattern("HH:mm")), car.getActualPrice()};
-					weekView.addData(new Object[] {car.getActualTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), car.getActualPrice()});
+					dayView.refresh(car.getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), car.getActualTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), car.getActualPrice());
+					weekView.addData(new Object[] {car.getActualTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), sum()});
 					park.setParkingInParkingSpot(i, null);
 					break;
 				}
 				i = (int) (Math.random() * park.size());
 			}
 		}
+	}
+	
+	private double sum() {
+		for(int i = 0; i < park.size(); ++i) {
+			sum += (park.getParkingSpot(i) != null) ? park.getParkingSpot(i).getActualPrice() : 0;
+		}
+		return sum;
 	}
 	
 	private boolean parkingSpotOccupied(int i) {

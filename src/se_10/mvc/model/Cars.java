@@ -22,7 +22,9 @@ public class Cars implements CarModel {
 	
 	@Override
 	public void setActualPrice(double pricePerHour) {
-		actualPrice = approachTime.until(LocalDateTime.now(), ChronoUnit.MINUTES) / 60 * pricePerHour;
+		actualPrice = approachTime.until(LocalDateTime.now(), ChronoUnit.MILLIS) / 60 * pricePerHour;
+		System.out.println(approachTime.until(LocalDateTime.now(), ChronoUnit.MILLIS));
+		System.out.println("Price: " + actualPrice);
 	}
 
 	@Override

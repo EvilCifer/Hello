@@ -25,7 +25,11 @@ public class WeekView {
 		if(!contains((String)data[0])) {
 			model.addRow(data);
 		}else {
-			// calculate sum of the revenues/earnings/takings
+			for(int i = 0; i < model.getRowCount(); ++i) {
+				if(model.getValueAt(i, 0).equals(data[0])) {
+					model.setValueAt(data[1], i, 1);
+				}
+			}
 		}
 	}
 	
