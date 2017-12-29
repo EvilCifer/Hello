@@ -20,8 +20,21 @@ public class WeekView {
 		return scroll;
 	}
 
-	private void addData(Object[] data) {
+	public void addData(Object[] data) {
 		DefaultTableModel model = (DefaultTableModel)table.getModel();
-		model.addRow(data);
+		if(!contains((String)data[0])) {
+			model.addRow(data);
+		}else {
+			// calculate sum of the revenues/earnings/takings
+		}
+	}
+	
+	private boolean contains(String date) {
+		for(int i = 0; i < table.getModel().getRowCount(); ++i) {
+			if(table.getModel().getValueAt(i, 0).equals(date)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

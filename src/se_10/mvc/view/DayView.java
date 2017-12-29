@@ -8,7 +8,7 @@ public class DayView{
 
 	private JScrollPane scroll;
 	private JTable table;
-	private static final String[] labels = {"Time", "Bill"};
+	private static final String[] labels = {"Approach Time", "Departure Time", "Bill"};
 	private Object[][] data = null;
 	
 	public JScrollPane createGUI() {
@@ -24,5 +24,14 @@ public class DayView{
 	public void addData(Object[] data) {
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.addRow(data);
+	}
+	
+	public void refresh(String approach, String depart, double value) {
+		for(int i = 0; i < table.getModel().getRowCount(); ++i) {
+			if(table.getModel().getValueAt(i, 0).equals(approach)) {
+				table.getModel().setValueAt(depart, i, 1);
+				table.getModel().setValueAt(value, i, 2);
+			}
+		}
 	}
 }

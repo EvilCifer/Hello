@@ -4,7 +4,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
@@ -75,6 +75,7 @@ public class CarParkController implements ActionListener{
 				if(isFull()) break;
 				if(!parkingSpotOccupied(i)) {
 					park.setParkingInParkingSpot(i, new Cars());
+					dayView.addData(new Object[] {park.getParkingSpot(i).getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm")), "", ""});
 					break;
 				}
 				i = (int) (Math.random() * park.size());
@@ -86,9 +87,11 @@ public class CarParkController implements ActionListener{
 				if(isEmpty()) break;
 				if(parkingSpotOccupied(i)) {
 					Cars car = park.getParkingSpot(i);
-					car.setActualTime(LocalTime.now());
-					Object[] o = new Object[] {car.getActualTime().format(DateTimeFormatter.ofPattern("HH:mm")), car.getActualPrice()};
-					dayView.addData(o);
+					car.setActualTime(LocalDateTime.now());
+					car.setActualPrice(park.getPricePerHour());
+					dayView.refresh(car.getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm")), car.getActualTime().format(DateTimeFormatter.ofPattern("HH:mm")), car.getActualPrice());
+//					Object[] o = new Object[] {car.getActualTime().format(DateTimeFormatter.ofPattern("HH:mm")), car.getActualPrice()};
+					weekView.addData(new Object[] {car.getActualTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), car.getActualPrice()});
 					park.setParkingInParkingSpot(i, null);
 					break;
 				}

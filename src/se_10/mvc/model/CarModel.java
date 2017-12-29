@@ -1,6 +1,6 @@
 package se_10.mvc.model;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public interface CarModel {
 
@@ -8,9 +8,9 @@ public interface CarModel {
 	
 	public void setActualPrice(double newPrice);
 	
-	public LocalTime getApproachTime();
+	public LocalDateTime getApproachTime();
 	
-	public void setActualTime(LocalTime actual);
+	public void setActualTime(LocalDateTime actual);
 	
-	public LocalTime getActualTime();
+	public LocalDateTime getActualTime();
 }
