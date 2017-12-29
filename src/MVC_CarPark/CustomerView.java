@@ -1,5 +1,7 @@
 package MVC_CarPark;
 
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
@@ -28,7 +30,7 @@ public class CustomerView extends JFrame {
 	public CustomerView() {
 
 		JPanel pricePanel = new JPanel();
-
+		
 		pricePanel.setLayout(null);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

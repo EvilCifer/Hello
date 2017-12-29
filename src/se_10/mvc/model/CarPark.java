@@ -25,6 +25,11 @@ public class CarPark implements CarParkModel {
 	}
 	
 	@Override
+	public void setParkingInParkingSpot(int i, Cars car) {
+		parkingSpots[i] = car;
+	}
+	
+	@Override
 	public Cars getParkingSpot(int i) {
 		return parkingSpots[i];
 	}

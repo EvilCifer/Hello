@@ -12,6 +12,8 @@ public class Cars implements CarModel {
 		approachTime = LocalTime.now();
 	}
 	
+	// implement method getTime()
+	
 	@Override
 	public double getActualPrice() {
 		return actualPrice;
@@ -20,5 +22,20 @@ public class Cars implements CarModel {
 	@Override
 	public void setActualPrice(double pricePerHour) {
 		actualPrice = approachTime.until(LocalTime.now(), ChronoUnit.MINUTES) / 60 * pricePerHour;
+	}
+
+	@Override
+	public LocalTime getApproachTime() {
+		return approachTime;
+	}
+	
+	@Override
+	public void setActualTime(LocalTime actual) {
+		actualTime = actual;
+	}
+	
+	@Override
+	public LocalTime getActualTime() {
+		return actualTime;
 	}
 }

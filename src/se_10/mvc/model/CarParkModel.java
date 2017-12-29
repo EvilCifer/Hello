@@ -8,6 +8,8 @@ public interface CarParkModel {
 	
 	public void setParkingSpots(int amount);
 	
+	public void setParkingInParkingSpot(int i, Cars car);
+	
 	public Cars getParkingSpot(int i);
 	
 	public Cars getFirstParkingSpot();
