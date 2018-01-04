@@ -17,7 +17,7 @@ import se_10.mvc.view.DayView;
 import se_10.mvc.view.VisitorView;
 import se_10.mvc.view.WeekView;
 
-public class CarParkController implements ActionListener{
+public class CarParkController implements ActionListener {
 
 	private static CarParkController instance = null;
 	private DayView dayView = new DayView();
@@ -33,11 +33,12 @@ public class CarParkController implements ActionListener{
 	
 	// Controller should save the visitors, in a  list or array.
 	
+	// Singleton Pattern because we want only one Instance of the CarPark per CarPark
+	
 	public CarParkController() {
-		park.setPricePerHour(2.00);
+		createGUI();
 	}
 	
-	// Singleton Pattern because we want only one Instance of the CarPark per CarPark
 	private CarParkController getInstance() {
 		if(instance == null) {
 			instance = new CarParkController();
@@ -69,7 +70,7 @@ public class CarParkController implements ActionListener{
 	}
 
 	
-	// Use Timer to prevent double click on enter???
+	// Use Timer to prevent double tap on enter???
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource() == enter) {
@@ -131,6 +132,6 @@ public class CarParkController implements ActionListener{
 	
 	public static void main(String[] args) {
 		CarParkController controller = new CarParkController();
-		controller.createGUI();
 	}
+	
 }

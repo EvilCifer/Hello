@@ -1,10 +1,16 @@
 package se_10.mvc.view;
 
+import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class DayView{
+public class DayView {
 
 	private JScrollPane scroll;
 	private JTable table;
@@ -12,12 +18,21 @@ public class DayView{
 	private Object[][] data = null;
 	
 	public JScrollPane createGUI() {
-		// Use DefaultTableModel because it updates automatically
 		DefaultTableModel model = new DefaultTableModel(data, labels);
 		table = new JTable(model);
 		table.setEnabled(false);
 		scroll = new JScrollPane(table);
 		table.setFillsViewportHeight(true);
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2) {
+					Point point = e.getPoint();
+					int row = table.rowAtPoint(point);
+					Object[] data = {"19:00:28", LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")), "25,12€", "13"};
+					VisitorView view = new VisitorView(data);
+				}
+			}
+		});
 		return scroll;
 	}
 	
@@ -34,4 +49,5 @@ public class DayView{
 			}
 		}
 	}
+	
 }
