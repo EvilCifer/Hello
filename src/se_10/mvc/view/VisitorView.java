@@ -47,7 +47,7 @@ public class VisitorView {
 		currentTime.setText((String) data[1]);
 		panel.add(currentTime);
 		panel.add(currentPriceText);
-		currentPrice.setText((String) data[2]);
+		currentPrice.setText((String) data[2] + "€");
 		panel.add(currentPrice);
 		panel.add(parkingSlotNumberText);
 		parkingSlotNumber.setText((String) data[3]);

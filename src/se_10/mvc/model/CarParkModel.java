@@ -17,4 +17,6 @@ public interface CarParkModel {
 	public Cars getLastParkingSpot();
 	
 	public int size();
+	
+	public int total();
 }

@@ -39,7 +39,7 @@ public class CarParkController implements ActionListener {
 		createGUI();
 	}
 	
-	private CarParkController getInstance() {
+	private static CarParkController getInstance() {
 		if(instance == null) {
 			instance = new CarParkController();
 		}
@@ -74,7 +74,7 @@ public class CarParkController implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getSource() == enter) {
-			int i = (int) (Math.random() * park.size());
+			int i = (int) (Math.random() * park.total());
 			while(true) {
 				if(isFull()) break;
 				if(!parkingSpotOccupied(i)) {
@@ -82,11 +82,11 @@ public class CarParkController implements ActionListener {
 					dayView.addData(new Object[] {park.getParkingSpot(i).getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), "", ""});
 					break;
 				}
-				i = (int) (Math.random() * park.size());
+				i = (int) (Math.random() * park.total());
 			}
 		}
 		if(arg0.getSource() == leave) {
-			int i = (int) (Math.random() * park.size());
+			int i = (int) (Math.random() * park.total());
 			while(true) {
 				if(isEmpty()) break;
 				if(parkingSpotOccupied(i)) {
@@ -98,13 +98,13 @@ public class CarParkController implements ActionListener {
 					park.setParkingInParkingSpot(i, null);
 					break;
 				}
-				i = (int) (Math.random() * park.size());
+				i = (int) (Math.random() * park.total());
 			}
 		}
 	}
 	
 	private double sum() {
-		for(int i = 0; i < park.size(); ++i) {
+		for(int i = 0; i < park.total(); ++i) {
 			sum += (park.getParkingSpot(i) != null) ? park.getParkingSpot(i).getActualPrice() : 0;
 		}
 		return sum;
@@ -115,19 +115,13 @@ public class CarParkController implements ActionListener {
 	}
 	
 	private boolean isFull() {
-		for(int i = 0; i < park.size(); ++i) {
-			if(park.getParkingSpot(i) == null) return false;
-		}
-		System.err.println("The Car Park is full!!!");
-		return true;
+		if(park.size() >= park.total()) System.err.println("The Car Park is full!!!");
+		return park.size() >= park.total();
 	}
 	
 	private boolean isEmpty() {
-		for(int i = 0; i < park.size(); ++i) {
-			if(park.getParkingSpot(i) != null) return false;
-		}
-		System.err.println("There are no Visitors, which can leave.");
-		return true;
+		if(park.size() == 0) System.err.println("The Car Park is empty!");
+		return park.size() == 0;
 	}
 	
 	public static void main(String[] args) {

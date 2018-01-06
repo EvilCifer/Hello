@@ -10,12 +10,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import se_10.mvc.model.CarPark;
+import se_10.mvc.model.Cars;
+
 public class DayView {
 
 	private JScrollPane scroll;
 	private JTable table;
 	private static final String[] labels = {"Approach Time", "Departure Time", "Bill"};
 	private Object[][] data = null;
+	private CarPark park;
+	
+	public DayView(){
+		park = CarPark.getInstance();
+	}
 	
 	public JScrollPane createGUI() {
 		DefaultTableModel model = new DefaultTableModel(data, labels);
@@ -28,12 +36,35 @@ public class DayView {
 				if(e.getClickCount() == 2) {
 					Point point = e.getPoint();
 					int row = table.rowAtPoint(point);
-					Object[] data = {"19:00:28", LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")), "25,12€", "13"};
-					VisitorView view = new VisitorView(data);
+					if(row > -1) {
+						Cars car = getCar(table.getValueAt(row, 0));
+						if(car != null) {
+							Object[] data = {car.getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")), "" + car.getActualPrice(), "" + getPosition(table.getValueAt(row, 0))};
+							VisitorView view = new VisitorView(data);
+						}
+					}
 				}
 			}
 		});
 		return scroll;
+	}
+	
+	private Cars getCar(Object approach) {
+		for(int i = 0; i < park.total(); ++i) {
+			if(park.getParkingSpot(i) != null && park.getParkingSpot(i).getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")).equals(approach)) {
+				return park.getParkingSpot(i);
+			}
+		}
+		return null;
+	}
+	
+	private int getPosition(Object approach) {
+		for(int i = 0; i < park.total(); ++i) {
+			if(park.getParkingSpot(i) != null && park.getParkingSpot(i).getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")).equals(approach)) {
+				return i+1;
+			}
+		}
+		return 0;
 	}
 	
 	public void addData(Object[] data) {

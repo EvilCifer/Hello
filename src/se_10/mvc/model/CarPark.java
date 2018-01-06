@@ -2,11 +2,20 @@ package se_10.mvc.model;
 
 public class CarPark implements CarParkModel {
 
+	private static CarPark instance = null;
 	private double pricePerHour;
-	private Cars[] parkingSpots;
+	private static Cars[] parkingSpots;
+	private int size = 0;
 	
 	public CarPark() {
 		parkingSpots = new Cars[10];
+	}
+	
+	public static CarPark getInstance() {
+		if(instance == null) {
+			instance = new CarPark();
+		}
+		return instance;
 	}
 	
 	@Override
@@ -26,6 +35,8 @@ public class CarPark implements CarParkModel {
 	
 	@Override
 	public void setParkingInParkingSpot(int i, Cars car) {
+		if(car == null) --size;
+		if(car != null) ++size;
 		parkingSpots[i] = car;
 	}
 	
@@ -46,6 +57,11 @@ public class CarPark implements CarParkModel {
 	
 	@Override
 	public int size() {
+		return size;
+	}
+	
+	@Override
+	public int total() {
 		return parkingSpots.length;
 	}
 }
