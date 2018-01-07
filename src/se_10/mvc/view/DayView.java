@@ -38,6 +38,7 @@ public class DayView {
 					int row = table.rowAtPoint(point);
 					if(row > -1) {
 						Cars car = getCar(table.getValueAt(row, 0));
+						car.setActualPrice(park.getPricePerHour());
 						if(car != null) {
 							Object[] data = {car.getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")), "" + car.getActualPrice(), "" + getPosition(table.getValueAt(row, 0))};
 							VisitorView view = new VisitorView(data);

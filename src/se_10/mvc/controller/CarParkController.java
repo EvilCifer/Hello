@@ -37,6 +37,7 @@ public class CarParkController implements ActionListener {
 	
 	public CarParkController() {
 		createGUI();
+		park.setPricePerHour(2);
 	}
 	
 	private static CarParkController getInstance() {

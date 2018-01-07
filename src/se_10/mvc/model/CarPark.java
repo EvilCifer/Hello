@@ -3,7 +3,7 @@ package se_10.mvc.model;
 public class CarPark implements CarParkModel {
 
 	private static CarPark instance = null;
-	private double pricePerHour;
+	private static double pricePerHour;
 	private static Cars[] parkingSpots;
 	private int size = 0;
 	

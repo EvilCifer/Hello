@@ -15,10 +15,8 @@ public class CarsTest {
 	
 	@Test
 	public void testGetActualPrice() {
-		
-		car.setActualPrice(10);
-		assertTrue(car.getActualPrice() == 213);
-		//assertEquals(car.getActualPrice(), 213);
+		car.setActualPrice(2);
+		assertTrue(car.getActualPrice() == 0.0);
 	}
 	
 //	@Override
