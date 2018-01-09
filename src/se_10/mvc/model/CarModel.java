@@ -10,7 +10,16 @@ public interface CarModel {
 	
 	public LocalDateTime getApproachTime();
 	
-	public void setActualTime(LocalDateTime actual);
+	public void setDepartureTime(LocalDateTime departureTime);
 	
-	public LocalDateTime getActualTime();
+	public LocalDateTime getDepartureTime();
+	
+	public void setPosition(int i);
+	
+	public int getPosition();
+	
+	public void setDepartured(boolean b);
+	
+	public boolean getDepartured();
+	
 }

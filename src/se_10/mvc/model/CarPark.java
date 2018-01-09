@@ -1,10 +1,14 @@
 package se_10.mvc.model;
 
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+
 public class CarPark implements CarParkModel {
 
 	private static CarPark instance = null;
 	private static double pricePerHour;
 	private static Cars[] parkingSpots;
+	private static HashMap<String, Cars> map = new HashMap<String, Cars>();
 	private int size = 0;
 	
 	public CarPark() {
@@ -36,13 +40,26 @@ public class CarPark implements CarParkModel {
 	@Override
 	public void setParkingInParkingSpot(int i, Cars car) {
 		if(car == null) --size;
-		if(car != null) ++size;
+		if(car != null) {
+			car.setPosition(i+1);
+			map.put(car.getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), car);
+			 ++size;
+		}
 		parkingSpots[i] = car;
+	}
+	
+	public void dump() {
+		map.forEach((k,v) -> System.out.println(v));
 	}
 	
 	@Override
 	public Cars getParkingSpot(int i) {
 		return parkingSpots[i];
+	}
+	
+	@Override
+	public Cars getParkingSpot(String date) {
+		return map.get(date);
 	}
 	
 	@Override

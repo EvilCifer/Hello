@@ -1,6 +1,8 @@
 package se_10.mvc.view;
 
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
@@ -8,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 import se_10.mvc.model.CarPark;
@@ -20,6 +23,7 @@ public class DayView {
 	private static final String[] labels = {"Approach Time", "Departure Time", "Bill"};
 	private Object[][] data = null;
 	private CarPark park;
+	private static final String _PATTERN = "HH:mm:ss";
 	
 	public DayView(){
 		park = CarPark.getInstance();
@@ -40,8 +44,25 @@ public class DayView {
 						Cars car = getCar(table.getValueAt(row, 0));
 						car.setActualPrice(park.getPricePerHour());
 						if(car != null) {
-							Object[] data = {car.getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")), "" + car.getActualPrice(), "" + getPosition(table.getValueAt(row, 0))};
-							VisitorView view = new VisitorView(data);
+							VisitorView view;
+							if(!car.getDepartured()) {
+								Object[] data = {car.getApproachTime().format(DateTimeFormatter.ofPattern(_PATTERN)), LocalDateTime.now().format(DateTimeFormatter.ofPattern(_PATTERN)), "" + car.getActualPrice(), "" + car.getPosition()};
+								view = new VisitorView(data);
+								Timer timer = new Timer(1000, new ActionListener() {
+									
+									@Override
+									public void actionPerformed(ActionEvent arg0) {
+										car.setActualPrice(park.getPricePerHour());
+										Object[] data = {LocalDateTime.now().format(DateTimeFormatter.ofPattern(_PATTERN)), "" + car.getActualPrice()};
+										view.update(data);
+									}
+								});
+								timer.start();
+							}else {
+								Object[] data = {car.getApproachTime().format(DateTimeFormatter.ofPattern(_PATTERN)), car.getDepartureTime().format(DateTimeFormatter.ofPattern(_PATTERN)), "" + car.getActualPrice(), "" + car.getPosition()};
+								view = new VisitorView(data);
+							}
+							
 						}
 					}
 				}
@@ -51,21 +72,7 @@ public class DayView {
 	}
 	
 	private Cars getCar(Object approach) {
-		for(int i = 0; i < park.total(); ++i) {
-			if(park.getParkingSpot(i) != null && park.getParkingSpot(i).getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")).equals(approach)) {
-				return park.getParkingSpot(i);
-			}
-		}
-		return null;
-	}
-	
-	private int getPosition(Object approach) {
-		for(int i = 0; i < park.total(); ++i) {
-			if(park.getParkingSpot(i) != null && park.getParkingSpot(i).getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")).equals(approach)) {
-				return i+1;
-			}
-		}
-		return 0;
+		return park.getParkingSpot(approach.toString());
 	}
 	
 	public void addData(Object[] data) {

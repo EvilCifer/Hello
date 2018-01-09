@@ -12,6 +12,8 @@ public interface CarParkModel {
 	
 	public Cars getParkingSpot(int i);
 	
+	public Cars getParkingSpot(String date);
+	
 	public Cars getFirstParkingSpot();
 	
 	public Cars getLastParkingSpot();
