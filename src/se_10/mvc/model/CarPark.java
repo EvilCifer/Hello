@@ -1,7 +1,13 @@
 package se_10.mvc.model;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class CarPark implements CarParkModel {
 
@@ -80,5 +86,22 @@ public class CarPark implements CarParkModel {
 	@Override
 	public int total() {
 		return parkingSpots.length;
+	}
+	
+	
+	public void save() {
+		XStream stream = new XStream(new DomDriver());
+		Class<?>[] classes = {CarPark.class, Cars.class};
+		XStream.setupDefaultSecurity(stream);
+		stream.allowTypes(classes);
+		stream.alias("carpark", CarPark.class);
+		stream.alias("car", Cars.class);
+		try {
+			FileWriter writer = new FileWriter("" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd")) + ".xml");
+			writer.write(stream.toXML(map));
+			writer.close();
+		}catch(IOException ex) {
+			ex.getStackTrace();
+		}
 	}
 }

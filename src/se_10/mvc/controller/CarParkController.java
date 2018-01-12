@@ -4,13 +4,21 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import se_10.mvc.model.CarPark;
 import se_10.mvc.model.Cars;
@@ -67,6 +75,15 @@ public class CarParkController implements ActionListener {
 		buttonPanel.add(dump);
 		frame.getContentPane().add(controlPanel);
 		frame.getContentPane().add(buttonPanel);
+		frame.addWindowListener(new WindowAdapter() {
+			// Use this Method to safe the data
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if(e.getID() == WindowEvent.WINDOW_CLOSING) {
+					park.save();
+				}
+			}
+		});
 		
 		frame.pack();
 		frame.setVisible(true);

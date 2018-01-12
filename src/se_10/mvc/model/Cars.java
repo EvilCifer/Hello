@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 public class Cars implements CarModel {
 
 	private LocalDateTime  approachTime, departureTime;
-	private double actualPrice, departurePrice;
+	private double actualPrice;
 	private int pos;
 	private boolean departured;
 	
@@ -17,16 +17,13 @@ public class Cars implements CarModel {
 	
 	@Override
 	public double getActualPrice() {
-		if(!departured) {
-			return actualPrice;
-		}
-		return departurePrice;
+		return actualPrice;
 	}
 	
 	@Override
 	public void setActualPrice(double pricePerHour) {
 		if(departured) {
-			departurePrice = approachTime.until(departureTime, ChronoUnit.MILLIS) / 1000 * pricePerHour;
+			actualPrice = approachTime.until(departureTime, ChronoUnit.MILLIS) / 1000 * pricePerHour;
 		}else {
 			actualPrice = approachTime.until(LocalDateTime.now(), ChronoUnit.MILLIS) / 1000 * pricePerHour;
 		}
