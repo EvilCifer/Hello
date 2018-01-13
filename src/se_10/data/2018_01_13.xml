@@ -1,0 +1,22 @@
+<map>
+  <entry>
+    <string>23:29:26</string>
+    <car>
+      <approachTime>2018-01-13T23:29:26.914</approachTime>
+      <departureTime>2018-01-13T23:29:31.537</departureTime>
+      <actualPrice>8.0</actualPrice>
+      <pos>6</pos>
+      <departured>true</departured>
+    </car>
+  </entry>
+  <entry>
+    <string>23:29:29</string>
+    <car>
+      <approachTime>2018-01-13T23:29:29.728</approachTime>
+      <departureTime>2018-01-13T23:29:32.882</departureTime>
+      <actualPrice>6.0</actualPrice>
+      <pos>9</pos>
+      <departured>true</departured>
+    </car>
+  </entry>
+</map>
