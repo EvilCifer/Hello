@@ -97,7 +97,10 @@ public class CarPark implements CarParkModel {
 		stream.alias("carpark", CarPark.class);
 		stream.alias("car", Cars.class);
 		try {
-			FileWriter writer = new FileWriter("" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd")) + ".xml");
+			// For Windows
+//			FileWriter writer = new FileWriter("src\\se_10\\data\\" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd")) + ".xml");
+			// For Linux
+			FileWriter writer = new FileWriter("src/se_10/data/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd")) + ".xml");
 			writer.write(stream.toXML(map));
 			writer.close();
 		}catch(IOException ex) {
