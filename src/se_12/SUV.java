@@ -2,20 +2,28 @@ package se_12;
 
 public class SUV extends Fahrzeug {
 
-	private static SUV instance = null;
+	private static SUV instance;
 	private double gebuehr;
 	private double quadrat;
 	
 	public SUV() {
-		gebuehr = 4.00;
-		quadrat = 4.00;
+		throwException();
+	}
+	
+	private SUV(double gebuehr, double quadrat) {
+		this.gebuehr = gebuehr;
+		this.quadrat = quadrat;
 	}
 	
 	public static synchronized SUV getInstance() {
 		if(instance == null) {
-			instance = new SUV();
+			instance = new SUV(4.00, 4.00);
 		}
 		return instance;
+	}
+	
+	private void throwException() {
+		throw new ExceptionInInitializerError();
 	}
 	
 	@Override

@@ -2,20 +2,28 @@ package se_12;
 
 public class Zweirad extends Fahrzeug {
 
-	private static Zweirad instance = null;
+	private static Zweirad instance;
 	private double gebuehr;
 	private double quadrat;
 	
 	public Zweirad() {
-		gebuehr = 2.50;
-		quadrat = 1.00;
+		throwException();
+	}
+	
+	private Zweirad(double gebuehr, double quadrat) {
+		this.gebuehr = gebuehr;
+		this.quadrat = quadrat;
 	}
 	
 	public static synchronized Zweirad getInstance() {
 		if(instance == null) {
-			instance = new Zweirad();
+			instance = new Zweirad(2.50, 1.00);
 		}
 		return instance;
+	}
+	
+	private void throwException() {
+		throw new ExceptionInInitializerError();
 	}
 	
 	@Override

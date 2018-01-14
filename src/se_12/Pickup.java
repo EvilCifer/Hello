@@ -2,11 +2,9 @@ package se_12;
 
 public class Pickup extends Fahrzeug {
 
-//	private static Pickup instance = null;
-	
+	private static Pickup instance;
 	private double gebuehr;
 	private double quadrat;
-	private static final Pickup instance = new Pickup(3.00, 5.00);
 	
 	public Pickup() {
 		throwException();
@@ -17,7 +15,10 @@ public class Pickup extends Fahrzeug {
 		this.quadrat = quadrat;
 	}
 	
-	public static Pickup getInstance() {
+	public static synchronized Pickup getInstance() {
+		if(instance == null) {
+			instance = new Pickup(3.00, 5.00);
+		}
 		return instance;
 	}
 	
@@ -35,8 +36,4 @@ public class Pickup extends Fahrzeug {
 		return quadrat;
 	}
 	
-	public static void main(String[] args) {
-		Fahrzeug pickup = Pickup.getInstance();
-		Fahrzeug pickup2 = new Pickup();
-	}
 }

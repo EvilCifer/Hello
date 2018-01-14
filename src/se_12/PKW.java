@@ -2,20 +2,28 @@ package se_12;
 
 public class PKW extends Fahrzeug {
 
-	private static PKW instance = null;
+	private static PKW instance;
 	private double gebuehr;
 	private double quadrat;
 	
 	public PKW() {
-		gebuehr = 2.00;
-		quadrat = 4.50;
+		throwException();
+	}
+	
+	private PKW(double gebuehr, double quadrat) {
+		this.gebuehr = gebuehr;
+		this.quadrat = quadrat;
 	}
 	
 	public static synchronized PKW getInstance() {
 		if(instance == null) {
-			instance = new PKW();
+			instance = new PKW(2.00, 4.50);
 		}
 		return instance;
+	}
+	
+	private void throwException() {
+		throw new ExceptionInInitializerError();
 	}
 	
 	@Override
