@@ -1,6 +1,9 @@
 package se_10.mvc.controller;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +11,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,28 +21,45 @@ import javax.swing.Timer;
 import se_10.mvc.model.CarPark;
 import se_10.mvc.model.Cars;
 import se_10.mvc.view.DayView;
+import se_10.mvc.view.TrafficLightView;
 import se_10.mvc.view.WeekView;
 
-public class CarParkController implements ActionListener {
+public class CarParkController extends JFrame implements ActionListener {
 
 	private static CarParkController instance = null;
+	private static final String PATTERN = "HH:mm:ss";
 	private DayView dayView = new DayView();
 	private WeekView weekView = new WeekView();
 	private CarPark park = new CarPark();
-	private JFrame frame;
-	private JButton enter, leave, dump;
+	private TrafficLightView light = new TrafficLightView();
+	private JButton enter, leave;
 	private JPanel buttonPanel, controlPanel;
+	private JPanel lightPanel = new JPanel();
 	private static double sum = 0;
-	
-	// Controls the views and the model (and the flow?)
-	
-	// Controller should save the visitors, in a  list or array.
 	
 	// Singleton Pattern because we want only one Instance of the CarPark per CarPark
 	
 	public CarParkController() {
-		createGUI();
+		super("Car Park");
+		setUpListener();
 		park.setPricePerHour(2);
+		enter = new JButton("Enter");
+		leave = new JButton("Leave");
+		controlPanel = new JPanel(new GridLayout(2, 1));
+		buttonPanel = new JPanel(new FlowLayout());
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(new GridLayout());
+		controlPanel.add(dayView.createGUI());
+		controlPanel.add(weekView.createGUI());
+		buttonPanel.add(enter);
+		buttonPanel.add(leave);
+		lightPanel.setPreferredSize(new Dimension(controlPanel.getWidth(), controlPanel.getHeight()));
+		enter.addActionListener(this);
+		leave.addActionListener(this);
+		getContentPane().add(controlPanel);
+		getContentPane().add(buttonPanel);
+		pack();
+		setVisible(true);
 	}
 	
 	public static CarParkController getInstance() {
@@ -48,28 +69,8 @@ public class CarParkController implements ActionListener {
 		return instance;
 	}
 	
-	private void createGUI() {
-		frame = new JFrame("Car Park");
-		enter = new JButton("Enter");
-		leave = new JButton("Leave");
-		dump = new JButton("Dump");
-		controlPanel = new JPanel(new GridLayout(2, 1));
-		buttonPanel = new JPanel(new FlowLayout());
-		
-		JFrame.setDefaultLookAndFeelDecorated(false);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new GridLayout());
-		enter.addActionListener(this);
-		leave.addActionListener(this);
-		dump.addActionListener(this);
-		controlPanel.add(dayView.createGUI());
-		controlPanel.add(weekView.createGUIWithReturn());
-		buttonPanel.add(enter);
-		buttonPanel.add(leave);
-		buttonPanel.add(dump);
-		frame.getContentPane().add(controlPanel);
-		frame.getContentPane().add(buttonPanel);
-		frame.addWindowListener(new WindowAdapter() {
+	private void setUpListener() {
+		addWindowListener(new WindowAdapter() {
 			// Use this Method to safe the data
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -77,12 +78,31 @@ public class CarParkController implements ActionListener {
 					park.save();
 				}
 			}
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				if(e.getID() == WindowEvent.WINDOW_OPENED) {
+					park.load();
+					Collection<Cars> c = park.getAll();
+					for(Cars car : c) {
+						String departureTime = (car.getDepartureTime() != null) ? car.getDepartureTime().format(DateTimeFormatter.ofPattern(PATTERN)) : "";
+						dayView.addData(new Object[] {car.getApproachTime().format(DateTimeFormatter.ofPattern(PATTERN)), departureTime, car.getActualPrice()});
+						if(!car.getDepartured()) {
+							park.setParkingInParkingSpot(car.getPosition(), car);
+						}
+						sum += car.getActualPrice();
+						weekView.addData(new Object[] {car.getDepartureTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), sum});
+					}
+				}
+			}
 		});
-		
-		frame.pack();
-		frame.setVisible(true);
 	}
-
+	
+//	public void paint(Graphics g) {
+//		int x1 = (int)(getWidth() * 2.0/3.0) - 52;
+//		int y1 = (int)(getHeight() * 2.0/3.0) - 52 - 100;
+//		light.draw(g, Color.BLACK, x1, y1, 104, 104);
+//	}
 	
 	// Use Timer to prevent double tap on enter???
 	@Override
@@ -90,10 +110,13 @@ public class CarParkController implements ActionListener {
 		if(arg0.getSource() == enter) {
 			int i = (int) (Math.random() * park.total());
 			while(true) {
-				if(isFull()) break;
+				if(isFull()) {
+					
+					break;
+				}
 				if(!parkingSpotOccupied(i)) {
 					park.setParkingInParkingSpot(i, new Cars());
-					dayView.addData(new Object[] {park.getParkingSpot(i).getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), "", ""});
+					dayView.addData(new Object[] {park.getParkingSpot(i).getApproachTime().format(DateTimeFormatter.ofPattern(PATTERN)), "", ""});
 					break;
 				}
 				i = (int) (Math.random() * park.total());
@@ -115,7 +138,7 @@ public class CarParkController implements ActionListener {
 					Cars car = park.getParkingSpot(i);
 					car.setDepartureTime(LocalDateTime.now());
 					car.setActualPrice(park.getPricePerHour());
-					dayView.refresh(car.getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), car.getDepartureTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), car.getActualPrice());
+					dayView.refresh(car.getApproachTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")), car.getDepartureTime().format(DateTimeFormatter.ofPattern(PATTERN)), car.getActualPrice());
 					weekView.addData(new Object[] {car.getDepartureTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), sum()});
 					car.setDepartured(true);
 					park.setParkingInParkingSpot(i, null);
@@ -123,9 +146,6 @@ public class CarParkController implements ActionListener {
 				}
 				i = (int) (Math.random() * park.total());
 			}
-		}
-		if(arg0.getSource() == dump) {
-			park.dump();
 		}
 	}
 	
@@ -141,16 +161,14 @@ public class CarParkController implements ActionListener {
 	}
 	
 	private boolean isFull() {
-		if(park.size() >= park.total()) System.err.println("The Car Park is full!!!");
+		if(park.size() >= park.total()) {
+			System.err.println("The Car Park is full!!!");
+		}
 		return park.size() >= park.total();
 	}
 	
 	private boolean isEmpty() {
 		if(park.size() == 0) System.err.println("The Car Park is empty!");
 		return park.size() == 0;
-	}
-	
-	public static void main(String[] args) {
-		CarParkController controller = CarParkController.getInstance();
 	}
 }

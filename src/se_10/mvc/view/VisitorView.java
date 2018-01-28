@@ -52,6 +52,7 @@ public class VisitorView {
 		panel.add(parkingSlotNumberText);
 		parkingSlotNumber.setText((String) data[3]);
 		panel.add(parkingSlotNumber);
+		frame.setResizable(false);
 		
 		frame.getContentPane().add(panel);
 		frame.pack();

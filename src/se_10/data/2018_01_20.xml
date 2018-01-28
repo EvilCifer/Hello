@@ -1,0 +1,22 @@
+<map>
+  <entry>
+    <string>23:21:44</string>
+    <se__10.mvc.model.Cars>
+      <approachTime>2018-01-20T23:21:44.299</approachTime>
+      <departureTime>2018-01-20T23:22:03.933</departureTime>
+      <actualPrice>38.0</actualPrice>
+      <pos>8</pos>
+      <departured>true</departured>
+    </se__10.mvc.model.Cars>
+  </entry>
+  <entry>
+    <string>23:21:47</string>
+    <se__10.mvc.model.Cars>
+      <approachTime>2018-01-20T23:21:47.184</approachTime>
+      <departureTime>2018-01-20T23:22:02.777</departureTime>
+      <actualPrice>30.0</actualPrice>
+      <pos>10</pos>
+      <departured>true</departured>
+    </se__10.mvc.model.Cars>
+  </entry>
+</map>

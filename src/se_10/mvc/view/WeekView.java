@@ -11,7 +11,7 @@ public class WeekView {
 	private static final String[] labels = {"Day", "Revenues"};
 	private Object[][] data = null;
 	
-	public JScrollPane createGUIWithReturn() {
+	public JScrollPane createGUI() {
 		DefaultTableModel model = new DefaultTableModel(data, labels);
 		table = new JTable(model);
 		table.setEnabled(false);

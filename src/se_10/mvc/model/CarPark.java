@@ -1,9 +1,11 @@
 package se_10.mvc.model;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.HashMap;
 
 import com.thoughtworks.xstream.XStream;
@@ -68,6 +70,10 @@ public class CarPark implements CarParkModel {
 		return map.get(date);
 	}
 	
+	public Collection<Cars> getAll(){
+		return map.values();
+	}
+	
 	@Override
 	public Cars getFirstParkingSpot() {
 		return parkingSpots[0];
@@ -91,11 +97,11 @@ public class CarPark implements CarParkModel {
 	
 	public void save() {
 		XStream stream = new XStream(new DomDriver());
-		Class<?>[] classes = {CarPark.class, Cars.class};
+		Class<?>[] classes = {CarPark.class, Cars.class, String.class, HashMap.class};
 		XStream.setupDefaultSecurity(stream);
 		stream.allowTypes(classes);
-		stream.alias("carpark", CarPark.class);
-		stream.alias("car", Cars.class);
+//		stream.alias("carpark", CarPark.class);
+//		stream.alias("car", Cars.class);
 		try {
 			// For Windows
 //			FileWriter writer = new FileWriter("src\\se_10\\data\\" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd")) + ".xml");
@@ -106,5 +112,14 @@ public class CarPark implements CarParkModel {
 		}catch(IOException ex) {
 			ex.getStackTrace();
 		}
+	}
+	
+	public void load() {
+		XStream stream = new XStream(new DomDriver());
+		XStream.setupDefaultSecurity(stream);
+		Class<?>[] classes = {CarPark.class, Cars.class, String.class, HashMap.class};
+		stream.allowTypes(classes);
+		File f = new File("src/se_10/data/" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd")) + ".xml");
+		if(f.exists()) map = (HashMap<String, Cars>)stream.fromXML(f);
 	}
 }
